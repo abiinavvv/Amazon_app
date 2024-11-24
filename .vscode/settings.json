@@ -1,3 +1,7 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic"
+    "java.compile.nullAnalysis.mode": "automatic",
+    "editor.cursorBlinking": "smooth",
+    "editor.cursorStyle": "line",
+    "workbench.activityBar.iconClickBehavior": "toggle",
+    "workbench.iconTheme": "material-icon-theme"
 }
