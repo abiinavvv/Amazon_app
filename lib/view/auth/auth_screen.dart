@@ -10,6 +10,7 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   bool isLoginEnabled = false;
+  var signupKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -129,133 +130,145 @@ class _AuthScreenState extends State<AuthScreen> {
                       )
                     ],
                   )
-                : Column(
-                    children: [
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Create Account",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 24,
+
+                // SIGN UP SCREEN
+
+                : Form(
+                    key: signupKey,
+                    child: Column(
+                      children: [
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Create Account",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 24,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const TextField(
-                        decoration: InputDecoration(
-                            hintText: "Your Name",
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black))),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const TextField(
-                        decoration: InputDecoration(
-                            hintText: " Email",
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black))),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      const TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            hintText: "Password",
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black))),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text("Password must be Atleast 6 characters"),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      const TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                            hintText: "Confirm Password",
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black))),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width / 2 - 100,
-                              vertical: 20),
-                          decoration: const BoxDecoration(
-                            color: Colors.orange,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                          child: const Text("Create a New Account"),
+                          ],
                         ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(bottom: 20)),
-                      const Divider(),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 20, top: 10),
-                        child: Text("Already a Customer?"),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isLoginEnabled = true;
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width / 2 - 40,
-                              vertical: 20),
-                          decoration: const BoxDecoration(
-                            color: Colors.orangeAccent,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "please enter your name";
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                              hintText: "Your Name",
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black))),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                              hintText: " Email",
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black))),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        TextFormField(
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                              hintText: "Password",
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black))),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text("Password must be Atleast 6 characters"),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        TextFormField(
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                              hintText: "Confirm Password",
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.black),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black))),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InkWell(
+                          onTap: () {},
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width / 2 - 100,
+                                vertical: 20),
+                            decoration: const BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
                             ),
+                            child: const Text("Create a New Account"),
                           ),
-                          child: const Text("Sign in"),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 89),
-                        child: TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                              "By creating an account, You Agree to Amazon's Conditions"),
+                        const Padding(padding: EdgeInsets.only(bottom: 20)),
+                        const Divider(),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 20, top: 10),
+                          child: Text("Already a Customer?"),
                         ),
-                      )
-                    ],
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              isLoginEnabled = true;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width / 2 - 40,
+                                vertical: 20),
+                            decoration: const BoxDecoration(
+                              color: Colors.orangeAccent,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: const Text("Sign in"),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 89),
+                          child: TextButton(
+                            onPressed: () {},
+                            child: const Text(
+                                "By creating an account, You Agree to Amazon's Conditions"),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
           ),
         )));
