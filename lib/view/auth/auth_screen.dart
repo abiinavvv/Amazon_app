@@ -11,6 +11,24 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   bool isLoginEnabled = false;
   var signupKey = GlobalKey<FormState>();
+  var signInKey = GlobalKey<FormState>();
+
+  void _signUpSubmit() {
+    final isValid = signupKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+    signupKey.currentState!.save();
+  }
+
+  void _signInSubmit() {
+    final isValid = signInKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+    signInKey.currentState!.save();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,112 +41,145 @@ class _AuthScreenState extends State<AuthScreen> {
           child: Padding(
             padding: const EdgeInsets.all(14.0),
             child: isLoginEnabled
-                ? Column(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          "Sign in with your Email and Password",
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "Sign In",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 25),
+                ? Form(
+                    key: signInKey,
+                    child: Column(
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            "Sign in with your Email and Password",
+                            style: TextStyle(fontSize: 20),
                           ),
-                          TextButton(
-                              onPressed: () {},
-                              child: const Text(
-                                "Forgot Password",
-                                style: TextStyle(fontSize: 15),
-                              ))
-                        ],
-                      ),
-                      const TextField(
-                        decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black)),
-                            hintText: "Email or Phone number",
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.black))),
-                      ),
-                      const Padding(
-                        padding: EdgeInsets.only(top: 15.0),
-                        child: TextField(
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "Sign In",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 25),
+                            ),
+                            TextButton(
+                                onPressed: () {},
+                                child: const Text(
+                                  "Forgot Password",
+                                  style: TextStyle(fontSize: 15),
+                                ))
+                          ],
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value!.isEmpty ||
+                                !RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+                                    .hasMatch(value)) {
+                              return " enter a valid email";
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                              focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black)),
+                              hintText: "Email or Phone number",
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.black))),
+                        ),
+                        TextFormField(
+                          keyboardType: TextInputType.visiblePassword,
+                          validator: (value) {
+                            RegExp regex = RegExp(
+                                r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$");
+                            if (value!.isEmpty) {
+                              return "Enter Password";
+                            } else {
+                              if (!regex.hasMatch(value)) {
+                                return "Enter Valid Password";
+                              } else {
+                                return null;
+                              }
+                            }
+                          },
                           obscureText: true,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                               hintText: "Password",
+                              focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black)),
                               focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.black))),
                         ),
-                      ),
-                      CheckboxListTile(
-                        value: true,
-                        onChanged: (value) {},
-                        title: const Text("Show Password"),
-                      ),
-                      CheckboxListTile(
-                        value: true,
-                        onChanged: (value) {},
-                        title: const Text("Keep me Signed In"),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width / 2 - 40,
-                              vertical: 20),
-                          decoration: const BoxDecoration(
-                            color: Colors.orange,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+                        CheckboxListTile(
+                          value: true,
+                          onChanged: (value) {},
+                          title: const Text("Show Password"),
+                        ),
+                        CheckboxListTile(
+                          value: true,
+                          onChanged: (value) {},
+                          title: const Text("Keep me Signed In"),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            _signInSubmit();
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width / 2 - 40,
+                                vertical: 20),
+                            decoration: const BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
                             ),
+                            child: const Text("Sign In"),
                           ),
-                          child: const Text("Sign In"),
                         ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(bottom: 20)),
-                      const Divider(),
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 20, top: 10),
-                        child: Text("New to Amazon?"),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            isLoginEnabled = false;
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal:
-                                  MediaQuery.of(context).size.width / 2 - 90,
-                              vertical: 20),
-                          decoration: const BoxDecoration(
-                            color: Colors.orangeAccent,
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
+                        const Padding(padding: EdgeInsets.only(bottom: 20)),
+                        const Divider(),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 20, top: 10),
+                          child: Text("New to Amazon?"),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              isLoginEnabled = false;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal:
+                                    MediaQuery.of(context).size.width / 2 - 90,
+                                vertical: 20),
+                            decoration: const BoxDecoration(
+                              color: Colors.orangeAccent,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
                             ),
+                            child: const Text("Create an new Account"),
                           ),
-                          child: const Text("Create an new Account"),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 89),
-                        child: TextButton(
-                          onPressed: () {},
-                          child:
-                              const Text("Conditions and User privacy policy"),
-                        ),
-                      )
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 89),
+                          child: TextButton(
+                            onPressed: () {},
+                            child: const Text(
+                                "Conditions and User privacy policy"),
+                          ),
+                        )
+                      ],
+                    ),
                   )
 
                 // SIGN UP SCREEN
@@ -161,6 +212,10 @@ class _AuthScreenState extends State<AuthScreen> {
                           },
                           decoration: const InputDecoration(
                               hintText: "Your Name",
+                              focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
@@ -171,8 +226,21 @@ class _AuthScreenState extends State<AuthScreen> {
                           height: 10,
                         ),
                         TextFormField(
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value!.isEmpty ||
+                                !RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
+                                    .hasMatch(value)) {
+                              return " enter a valid email";
+                            }
+                            return null;
+                          },
                           decoration: const InputDecoration(
                               hintText: " Email",
+                              focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
@@ -183,9 +251,27 @@ class _AuthScreenState extends State<AuthScreen> {
                           height: 10,
                         ),
                         TextFormField(
+                          keyboardType: TextInputType.visiblePassword,
+                          validator: (value) {
+                            RegExp regex = RegExp(
+                                r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$");
+                            if (value!.isEmpty) {
+                              return "Enter Password";
+                            } else {
+                              if (!regex.hasMatch(value)) {
+                                return "Enter Valid Password";
+                              } else {
+                                return null;
+                              }
+                            }
+                          },
                           obscureText: true,
                           decoration: const InputDecoration(
                               hintText: "Password",
+                              focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
@@ -205,9 +291,27 @@ class _AuthScreenState extends State<AuthScreen> {
                           height: 5,
                         ),
                         TextFormField(
+                          keyboardType: TextInputType.visiblePassword,
+                          validator: (value) {
+                            RegExp regex = RegExp(
+                                r"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$");
+                            if (value!.isEmpty) {
+                              return "Enter Password";
+                            } else {
+                              if (!regex.hasMatch(value)) {
+                                return "Enter Valid Password";
+                              } else {
+                                return null;
+                              }
+                            }
+                          },
                           obscureText: true,
                           decoration: const InputDecoration(
                               hintText: "Confirm Password",
+                              focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
+                              errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.red)),
                               enabledBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: Colors.black),
                               ),
@@ -218,7 +322,9 @@ class _AuthScreenState extends State<AuthScreen> {
                           height: 20,
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            _signUpSubmit();
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal:
